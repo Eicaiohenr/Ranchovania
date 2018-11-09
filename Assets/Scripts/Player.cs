@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
 
@@ -12,6 +13,8 @@ public class Player : MonoBehaviour {
     public bool doubleJump;
     public bool facingRight = true;
     public bool canReceiveDamage = true;
+    public bool Win = false;
+    AudioSource musicWin;
     public float jumpForce;
     public float playerSpeed;  //allows us to be able to change speed in Unity
     public Vector2 jumpHeight;
@@ -20,6 +23,7 @@ public class Player : MonoBehaviour {
     private PlayerLife playerLife;
     private IEnumerator damageDlay;
     public SpriteRenderer sprite;
+    
 
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -77,14 +81,19 @@ public class Player : MonoBehaviour {
         }
     }
     void OnTriggerEnter2D(Collider2D other) {
-        if(canReceiveDamage) {
-		    /*print("Coll");
-		    if(other.gameObject.tag == "Enemy"){
-			    playerLife.CurrentLife--;
-		    }
-            */
+        if(other.gameObject.tag == "EndDetector") {
+		    Win = true;
+            
         }
+       
 	}
+    public void ChangeScene(string sceneName){
+		if (Win==true){
+        SceneManager.LoadScene("StartMenu");
+        } 
+     }
+
+
     void DamageReceived() {
         damageDlay = DamageDlay();
         StartCoroutine (damageDlay);
